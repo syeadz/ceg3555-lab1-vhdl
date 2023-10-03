@@ -13,14 +13,14 @@ entity register8bit is
 end register8bit;
 
 architecture rtl of register8bit is
-  signal data : std_logic_vector(7 downto 0);
+  signal int_data_out : std_logic_vector(7 downto 0);
 begin
     q0 : entity work.enardFF_2 port map (
         i_resetBar => "not"(reset),
         i_d => data_in(0),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(0),
+        o_q => int_data_out(0),
         o_qBar => open
     );
 
@@ -29,7 +29,7 @@ begin
         i_d => data_in(1),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(1),
+        o_q => int_data_out(1),
         o_qBar => open
     );
 
@@ -38,7 +38,7 @@ begin
         i_d => data_in(2),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(2),
+        o_q => int_data_out(2),
         o_qBar => open
     );
 
@@ -47,7 +47,7 @@ begin
         i_d => data_in(3),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(3),
+        o_q => int_data_out(3),
         o_qBar => open
     );
 
@@ -56,7 +56,7 @@ begin
         i_d => data_in(4),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(4),
+        o_q => int_data_out(4),
         o_qBar => open
     );
 
@@ -65,7 +65,7 @@ begin
         i_d => data_in(5),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(5),
+        o_q => int_data_out(5),
         o_qBar => open
     );
 
@@ -74,7 +74,7 @@ begin
         i_d => data_in(6),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(6),
+        o_q => int_data_out(6),
         o_qBar => open
     );
 
@@ -83,9 +83,9 @@ begin
         i_d => data_in(7),
         i_enable => enable,
         i_clock => clk,
-        o_q => data(7),
+        o_q => int_data_out(7),
         o_qBar => open
     );
 
-    data_out <= data;
+    data_out <= int_data_out;
 end rtl;
