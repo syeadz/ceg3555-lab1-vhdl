@@ -6,7 +6,8 @@ end;
 
 architecture rtl of mux2to1_tb is
   signal sel_tb    : std_logic;
-  signal d_tb      : std_logic_vector(1 downto 0);
+  signal d0_tb     : std_logic;
+  signal d1_tb     : std_logic;
   signal q_tb      : std_logic;
   signal enable_tb : std_logic;
 
@@ -16,7 +17,8 @@ begin
     (
     sel    => sel_tb,
     enable => enable_tb,
-    d      => d_tb,
+    d0     => d0_tb,
+    d1     => d1_tb,
     q      => q_tb
     );
 
@@ -26,48 +28,57 @@ begin
     enable_tb <= '1';
 
     sel_tb <= '0';
-    d_tb   <= "00";
+    d0_tb  <= '0';
+    d1_tb  <= '0';
     wait for period;
     assert q_tb = '0' report "m0 failed" severity error;
 
     sel_tb <= '0';
-    d_tb   <= "01";
+    d0_tb  <= '0';
+    d1_tb  <= '1';
     wait for period;
     assert q_tb = '0' report "m1 failed" severity error;
 
     sel_tb <= '0';
-    d_tb   <= "10";
+    d0_tb  <= '1';
+    d1_tb  <= '0';
     wait for period;
     assert q_tb = '1' report "m2 failed" severity error;
 
     sel_tb <= '0';
-    d_tb   <= "11";
+    d0_tb  <= '1';
+    d1_tb  <= '1';
     wait for period;
     assert q_tb = '1' report "m3 failed" severity error;
 
     sel_tb <= '1';
-    d_tb   <= "00";
+    d0_tb  <= '0';
+    d1_tb  <= '0';
     wait for period;
     assert q_tb = '0' report "m4 failed" severity error;
 
     sel_tb <= '1';
-    d_tb   <= "01";
+    d0_tb  <= '0';
+    d1_tb  <= '1';
     wait for period;
     assert q_tb = '1' report "m5 failed" severity error;
 
     sel_tb <= '1';
-    d_tb   <= "10";
+    d0_tb  <= '1';
+    d1_tb  <= '0';
     wait for period;
     assert q_tb = '0' report "m6 failed" severity error;
 
     sel_tb <= '1';
-    d_tb   <= "11";
+    d0_tb  <= '1';
+    d1_tb  <= '1';
     wait for period;
     assert q_tb = '1' report "m7 failed" severity error;
 
     enable_tb <= '0';
     sel_tb    <= '1';
-    d_tb      <= "10";
+    d0_tb     <= '1';
+    d1_tb     <= '1';
     wait for period;
     assert q_tb = '0' report "enable failed" severity error;
 
