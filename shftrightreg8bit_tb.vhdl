@@ -13,6 +13,8 @@ architecture rtl of shftrightreg8bit_tb is
   signal data_out_tb : std_logic_vector(7 downto 0);
   signal shift_tb    : std_logic;
 
+  signal data_should_be : std_logic_vector(7 downto 0);
+
   signal sim_end  : boolean := false;
   constant period : time    := 50 ns;
 begin
@@ -23,8 +25,7 @@ begin
       reset    => reset_tb,
       enable   => enable_tb,
       data_in  => data_in_tb,
-      data_out => data_out_tb,
-      shift    => shift_tb
+      data_out => data_out_tb
     );
 
   clock_process : process
@@ -56,8 +57,7 @@ begin
     assert data_out_tb = "00000000" report "Data mismatch at clock off" severity error;
 
     wait for period;
-    wait for period;
-    assert data_out_tb = "00000001" report "Data mismatch at clock on, enable on" severity error;
+    assert data_out_tb = "10000000" report "Data mismatch at clock on, enable on" severity error;
 
     reset_tb <= '1';
     wait for period;
@@ -78,18 +78,6 @@ begin
     shift_tb  <= '1';
     for i in 0 to 255 loop
       data_in_tb <= std_logic_vector(to_unsigned(i, 8));
-      wait for period;
-      wait for period;
-    end loop;
-
-    -- non shifting test
-    shift_tb  <= '0';
-    enable_tb <= '1';
-    reset_tb  <= '0';
-    for i in 0 to 255 loop
-      data_in_tb <= std_logic_vector(to_unsigned(i, 8));
-      assert data_out_tb = data_in_tb report "Data mismatch at address " & integer'image(i) severity error;
-      wait for period;
       wait for period;
     end loop;
 
