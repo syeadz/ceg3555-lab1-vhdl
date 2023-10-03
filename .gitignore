@@ -1,0 +1,8 @@
+*
+!*/
+!*.*
+
+/vhdlSrcSyn-Sep25_2007
+*.o
+*.vcd
+*.cf
