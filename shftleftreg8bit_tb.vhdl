@@ -73,7 +73,19 @@ begin
     data_in_tb <= "00000000";
     wait for period;
 
+    -- shifting test
     enable_tb <= '1';
+    shift_tb  <= '1';
+    for i in 0 to 255 loop
+      data_in_tb <= std_logic_vector(to_unsigned(i, 8));
+      wait for period;
+      wait for period;
+    end loop;
+
+    -- non shifting test
+    shift_tb  <= '0';
+    enable_tb <= '1';
+    reset_tb  <= '0';
     for i in 0 to 255 loop
       data_in_tb <= std_logic_vector(to_unsigned(i, 8));
       assert data_out_tb = data_in_tb report "Data mismatch at address " & integer'image(i) severity error;
