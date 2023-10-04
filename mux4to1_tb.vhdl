@@ -30,42 +30,42 @@ begin
     enable_tb <= '1';
     sel0_tb   <= '0';
     sel1_tb   <= '0';
-    d_tb <= "0000";
+    d_tb      <= "0000";
     wait for period;
     assert q_tb = '0' report "Failed test 1" severity error;
 
     enable_tb <= '1';
     sel0_tb   <= '0';
     sel1_tb   <= '0';
-    d_tb <= "0001";
+    d_tb      <= "0001";
     wait for period;
     assert q_tb = '1' report "Failed test 2" severity error;
 
     enable_tb <= '1';
     sel0_tb   <= '1';
     sel1_tb   <= '0';
-    d_tb    <= "0010";
+    d_tb      <= "0010";
     wait for period;
     assert q_tb = '1' report "Failed test 3" severity error;
 
     enable_tb <= '1';
     sel0_tb   <= '0';
     sel1_tb   <= '1';
-    d_tb    <= "0100";
+    d_tb      <= "0100";
     wait for period;
     assert q_tb = '1' report "Failed test 4" severity error;
 
     enable_tb <= '1';
     sel0_tb   <= '1';
     sel1_tb   <= '1';
-    d_tb    <= "1000";
+    d_tb      <= "1000";
     wait for period;
     assert q_tb = '1' report "Failed test 5" severity error;
 
     enable_tb <= '0';
     sel0_tb   <= '1';
     sel1_tb   <= '0';
-    d_tb    <= "1111";
+    d_tb      <= "1111";
     wait for period;
     assert q_tb = '0' report "Failed test 6" severity error;
 

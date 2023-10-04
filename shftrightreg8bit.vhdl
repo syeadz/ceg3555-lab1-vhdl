@@ -12,16 +12,17 @@ entity shftrightreg8bit is
 end;
 
 architecture rtl of shftrightreg8bit is
-  signal feedback  : std_logic_vector(7 downto 0) := "10000000";
+  signal feedback     : std_logic_vector(7 downto 0) := "10000000";
   signal int_data_out : std_logic_vector(7 downto 0);
 begin
-  reg0 : entity work.register8bit port map (
+  reg0 : entity work.register8bit port map
+    (
     clk      => clk,
     reset    => reset,
     enable   => enable,
     data_in  => feedback,
     data_out => int_data_out
-  );
+    );
 
   data_out <= int_data_out;
 

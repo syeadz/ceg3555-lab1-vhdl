@@ -39,10 +39,10 @@ begin
   stim_proc : process
   begin
     enable_tb <= '0';
-    reset_tb <= '1', '0' after period;
+    reset_tb  <= '1', '0' after period;
     wait for period;
     assert data_out_tb = "00000000" report "Data mismatch at reset" severity error;
-    
+
     data_in_tb <= "00000001";
     wait for period;
     assert data_out_tb = "00000000" report "Data mismatch at reset" severity error;
@@ -61,7 +61,7 @@ begin
 
     reset_tb <= '0';
 
-    enable_tb <= '0';
+    enable_tb  <= '0';
     data_in_tb <= "00000010";
     wait for period;
     assert data_out_tb = "00000000" report "Data mismatch at enable off" severity error;

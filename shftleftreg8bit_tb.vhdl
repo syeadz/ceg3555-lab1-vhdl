@@ -36,7 +36,7 @@ begin
 
   stim_proc : process
   begin
-    reset_tb <= '0';
+    reset_tb  <= '0';
     enable_tb <= '1';
     wait for period;
 
