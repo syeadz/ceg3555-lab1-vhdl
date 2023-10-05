@@ -9,43 +9,47 @@ entity datapath is
     selD, loadDM, rightShift : in std_logic;
     gReset                   : in std_logic;
     loadA                    : in std_logic;
-    led_lights               : out std_logic_vector(7 downto 0)
+    led_signals               : out std_logic_vector(7 downto 0)
   );
 end entity;
 
 architecture rtl of datapath is
-  signal shiftRight, shiftLeft                     : std_logic;
-  signal gMask_data_in, gMask_data_out, gMask_temp : std_logic_vector(7 downto 0) := "00000001";
-  signal dMask_data_in, dMask_data_out, dMask_temp : std_logic_vector(7 downto 0) := "10000000";
-  signal gMask_or_dMask_data                       : std_logic_vector(7 downto 0);
-  signal affichage_data_in, affichage_data_out     : std_logic_vector(7 downto 0) := (others => '0');
+  signal shiftRight, shiftLeft : std_logic;
+
+  signal gMask_data_in, gMask_data_out : std_logic_vector(7 downto 0) := "00000001";
+  signal dMask_data_in, dMask_data_out : std_logic_vector(7 downto 0) := "10000000";
+
+  signal gMask_enable, dMask_enable : std_logic := '1';
+  signal gMask_or_dMask_data        : std_logic_vector(7 downto 0);
+
+  signal aff_data_in, aff_data_out : std_logic_vector(7 downto 0) := (others => '0');
+
+  signal temp_data : std_logic_vector(7 downto 0) := (others => '0');
 begin
 
   dMaskShftReg : entity work.shftrightreg8bit port map
     (
     clk      => clk,
     reset    => '0',
-    enable   => '1',
+    enable   => dmask_enable,
     data_in  => dMask_data_in,
-    data_out => dMask_data_out,
-    shift    => selD
+    data_out => dMask_data_out
     );
 
-  dMask_data_in <= dMask_data_out after 75 ns;
-
+  dMask_data_in <= dMask_data_out(0) & dMask_data_out(7 downto 1) after 10 ns;
 
   gMaskShftReg : entity work.shftleftreg8bit port
     map (
     clk      => clk,
     reset    => '0',
-    enable   => '1',
+    enable   => gmask_enable,
     data_in  => gMask_data_in,
-    data_out => gMask_data_out,
-    shift   => selG
+    data_out => gMask_data_out
     );
 
-  gMask_data_in <= gMask_data_out after 75 ns;
+  gMask_data_in <= gMask_data_out(6 downto 0) & gMask_data_out(7) after 10 ns;
 
+  
   gMask_or_dMask_data <= gMask_data_out or dMask_data_out;
 
   muxAff : entity work.mux32to8 port
@@ -57,7 +61,7 @@ begin
     d1     => gMask_data_out,
     d2     => dMask_data_out,
     d3     => gMask_or_dMask_data,
-    q      => affichage_data_in
+    q      => aff_data_in
     );
 
   affichageReg : entity work.register8bit port
@@ -65,9 +69,28 @@ begin
     clk      => clk,
     reset    => gReset,
     enable   => '1',
-    data_in  => affichage_data_in,
-    data_out => affichage_data_out
+    data_in  => aff_data_in,
+    data_out => aff_data_out
     );
 
-  led_lights <= affichage_data_in;
+  gmask_enable   <= selG and not gReset after 10 ns;
+  dmask_enable   <= selD and not gReset after 10 ns;
+  aff_data_in(0) <= (gmask_data_out(0) and selG) or (dmask_data_out(0) and selD);
+  aff_data_in(1) <= (gmask_data_out(1) and selG) or (dmask_data_out(1) and selD);
+  aff_data_in(2) <= (gmask_data_out(2) and selG) or (dmask_data_out(2) and selD);
+  aff_data_in(3) <= (gmask_data_out(3) and selG) or (dmask_data_out(3) and selD);
+  aff_data_in(4) <= (gmask_data_out(4) and selG) or (dmask_data_out(4) and selD);
+  aff_data_in(5) <= (gmask_data_out(5) and selG) or (dmask_data_out(5) and selD);
+  aff_data_in(6) <= (gmask_data_out(6) and selG) or (dmask_data_out(6) and selD);
+  aff_data_in(7) <= (gmask_data_out(7) and selG) or (dmask_data_out(7) and selD);
+
+  temp_data <= aff_data_in;
+  led_signals(0) <= temp_data(0) and not gReset;
+  led_signals(1) <= temp_data(1) and not gReset;
+  led_signals(2) <= temp_data(2) and not gReset;
+  led_signals(3) <= temp_data(3) and not gReset;
+  led_signals(4) <= temp_data(4) and not gReset;
+  led_signals(5) <= temp_data(5) and not gReset;
+  led_signals(6) <= temp_data(6) and not gReset;
+  led_signals(7) <= temp_data(7) and not gReset;
 end rtl;
