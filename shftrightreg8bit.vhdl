@@ -8,17 +8,28 @@ entity shftrightreg8bit is
     reset    : in std_logic;
     enable   : in std_logic;
     data_in  : in std_logic_vector(7 downto 0);
-    data_out : out std_logic_vector(7 downto 0)
+    data_out : out std_logic_vector(7 downto 0);
+    shift    : in std_logic
   );
 end;
 
 architecture rtl of shftrightreg8bit is
-  signal int_data_out : std_logic_vector(7 downto 0);
+  signal int_data_out                   : std_logic_vector(7 downto 0);
+  signal d0, d1, d2, d3, d4, d5, d6, d7 : std_logic;
 begin
+  d0 <= (data_in(0) and not shift) or (data_in(1) and shift);
+  d1 <= (data_in(1) and not shift) or (data_in(2) and shift);
+  d2 <= (data_in(2) and not shift) or (data_in(3) and shift);
+  d3 <= (data_in(3) and not shift) or (data_in(4) and shift);
+  d4 <= (data_in(4) and not shift) or (data_in(5) and shift);
+  d5 <= (data_in(5) and not shift) or (data_in(6) and shift);
+  d6 <= (data_in(6) and not shift) or (data_in(7) and shift);
+  d7 <= (data_in(7) and not shift) or (data_in(0) and shift);
+
   q0 : entity work.enardFF_2 port map
     (
     i_resetBar => "not"(reset),
-    i_d        => data_in(1),
+    i_d        => d0,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(0),
@@ -28,7 +39,7 @@ begin
   q1 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(2),
+    i_d        => d1,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(1),
@@ -38,7 +49,7 @@ begin
   q2 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(3),
+    i_d        => d2,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(2),
@@ -48,7 +59,7 @@ begin
   q3 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(4),
+    i_d        => d3,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(3),
@@ -58,7 +69,7 @@ begin
   q4 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(5),
+    i_d        => d4,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(4),
@@ -68,7 +79,7 @@ begin
   q5 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(6),
+    i_d        => d5,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(5),
@@ -78,7 +89,7 @@ begin
   q6 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(7),
+    i_d        => d6,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(6),
@@ -88,7 +99,7 @@ begin
   q7 : entity work.enardFF_2 port
     map (
     i_resetBar => "not"(reset),
-    i_d        => data_in(0),
+    i_d        => d7,
     i_enable   => enable,
     i_clock    => clk,
     o_q        => int_data_out(7),

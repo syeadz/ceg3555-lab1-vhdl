@@ -50,14 +50,28 @@ begin
     loadA_tb      <= '0';
     wait for period*2;
 
-    gReset_tb     <= '0';
-    selG_tb       <= '0';
-    loadGM_tb     <= '1';
-    leftShift_tb  <= '0';
+    selG_tb       <= '1';
     selD_tb       <= '0';
-    loadDM_tb     <= '1';
-    rightShift_tb <= '0';
-    loadA_tb      <= '0';
+    wait for period*2;
+
+    selG_tb       <= '1';
+    selD_tb       <= '0';
+    wait for period*2;
+
+    selG_tb       <= '0';
+    selD_tb       <= '1';
+    wait for period*2;
+
+    selG_tb       <= '0';
+    selD_tb       <= '1';
+    wait for period*2;
+
+    selG_tb       <= '1';
+    selD_tb       <= '1';
+    wait for period*2;
+
+    selG_tb       <= '1';
+    selD_tb       <= '1';
     wait for period*2;
 
     sim_end <= true;
