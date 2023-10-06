@@ -25,7 +25,7 @@ begin
     selD       => selD_tb,
     loadDM     => loadDM_tb,
     rightShift => rightShift_tb,
-    gReset     => gReset_tb,
+    clearA     => gReset_tb,
     loadA      => loadA_tb,
     led_signals => led_signals_tb
     );
@@ -43,6 +43,11 @@ begin
 
   stim_proc : process
   begin
+    loadA_tb      <= '1';
+    loadGM_tb     <= '1';
+    loadDM_tb     <= '1';
+    leftShift_tb  <= '1';
+    rightShift_tb <= '1';
     gReset_tb <= '0';
     selG_tb       <= '0';
     selD_tb       <= '0';

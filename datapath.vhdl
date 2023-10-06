@@ -7,9 +7,9 @@ entity datapath is
     clk                      : in std_logic;
     selG, loadGM, leftShift  : in std_logic;
     selD, loadDM, rightShift : in std_logic;
-    gReset                   : in std_logic;
+    clearA                   : in std_logic;
     loadA                    : in std_logic;
-    led_signals               : out std_logic_vector(7 downto 0)
+    led_signals              : out std_logic_vector(7 downto 0)
   );
 end entity;
 
@@ -27,6 +27,8 @@ architecture rtl of datapath is
   signal temp_data : std_logic_vector(7 downto 0) := (others => '0');
 begin
 
+  dmask_enable <= selD and loadDM and rightShift and not clearA after 10 ns;
+
   dMaskShftReg : entity work.shftrightreg8bit port map
     (
     clk      => clk,
@@ -37,6 +39,8 @@ begin
     );
 
   dMask_data_in <= dMask_data_out(0) & dMask_data_out(7 downto 1) after 10 ns;
+  
+  gmask_enable  <= selG and loadGM and leftShift and not clearA after 10 ns;
 
   gMaskShftReg : entity work.shftleftreg8bit port
     map (
@@ -47,8 +51,7 @@ begin
     data_out => gMask_data_out
     );
 
-  gMask_data_in <= gMask_data_out(6 downto 0) & gMask_data_out(7) after 10 ns;
-
+  gMask_data_in       <= gMask_data_out(6 downto 0) & gMask_data_out(7) after 10 ns;
   
   gMask_or_dMask_data <= gMask_data_out or dMask_data_out;
 
@@ -67,14 +70,12 @@ begin
   affichageReg : entity work.register8bit port
     map (
     clk      => clk,
-    reset    => gReset,
+    reset    => clearA,
     enable   => '1',
     data_in  => aff_data_in,
     data_out => aff_data_out
     );
 
-  gmask_enable   <= selG and not gReset after 10 ns;
-  dmask_enable   <= selD and not gReset after 10 ns;
   aff_data_in(0) <= (gmask_data_out(0) and selG) or (dmask_data_out(0) and selD);
   aff_data_in(1) <= (gmask_data_out(1) and selG) or (dmask_data_out(1) and selD);
   aff_data_in(2) <= (gmask_data_out(2) and selG) or (dmask_data_out(2) and selD);
@@ -85,12 +86,13 @@ begin
   aff_data_in(7) <= (gmask_data_out(7) and selG) or (dmask_data_out(7) and selD);
 
   temp_data <= aff_data_in;
-  led_signals(0) <= temp_data(0) and not gReset;
-  led_signals(1) <= temp_data(1) and not gReset;
-  led_signals(2) <= temp_data(2) and not gReset;
-  led_signals(3) <= temp_data(3) and not gReset;
-  led_signals(4) <= temp_data(4) and not gReset;
-  led_signals(5) <= temp_data(5) and not gReset;
-  led_signals(6) <= temp_data(6) and not gReset;
-  led_signals(7) <= temp_data(7) and not gReset;
+
+  led_signals(0) <= temp_data(0) and not clearA;
+  led_signals(1) <= temp_data(1) and not clearA;
+  led_signals(2) <= temp_data(2) and not clearA;
+  led_signals(3) <= temp_data(3) and not clearA;
+  led_signals(4) <= temp_data(4) and not clearA;
+  led_signals(5) <= temp_data(5) and not clearA;
+  led_signals(6) <= temp_data(6) and not clearA;
+  led_signals(7) <= temp_data(7) and not clearA;
 end rtl;
