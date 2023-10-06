@@ -14,8 +14,6 @@ entity datapath is
 end entity;
 
 architecture rtl of datapath is
-  signal shiftRight, shiftLeft : std_logic;
-
   signal gMask_data_in, gMask_data_out : std_logic_vector(7 downto 0) := "00000001";
   signal dMask_data_in, dMask_data_out : std_logic_vector(7 downto 0) := "10000000";
 
@@ -27,7 +25,7 @@ architecture rtl of datapath is
   signal temp_data : std_logic_vector(7 downto 0) := (others => '0');
 begin
 
-  dmask_enable <= selD and loadDM and rightShift and not clearA after 10 ns;
+  dmask_enable <= selD and loadDM after 10 ns;
 
   dMaskShftReg : entity work.shftrightreg8bit port map
     (
@@ -40,7 +38,7 @@ begin
 
   dMask_data_in <= dMask_data_out(0) & dMask_data_out(7 downto 1) after 10 ns;
   
-  gmask_enable  <= selG and loadGM and leftShift and not clearA after 10 ns;
+  gmask_enable  <= selG and loadGM after 10 ns;
 
   gMaskShftReg : entity work.shftleftreg8bit port
     map (
@@ -85,14 +83,5 @@ begin
   aff_data_in(6) <= (gmask_data_out(6) and selG) or (dmask_data_out(6) and selD);
   aff_data_in(7) <= (gmask_data_out(7) and selG) or (dmask_data_out(7) and selD);
 
-  temp_data <= aff_data_in;
-
-  led_signals(0) <= temp_data(0) and not clearA;
-  led_signals(1) <= temp_data(1) and not clearA;
-  led_signals(2) <= temp_data(2) and not clearA;
-  led_signals(3) <= temp_data(3) and not clearA;
-  led_signals(4) <= temp_data(4) and not clearA;
-  led_signals(5) <= temp_data(5) and not clearA;
-  led_signals(6) <= temp_data(6) and not clearA;
-  led_signals(7) <= temp_data(7) and not clearA;
+  led_signals <= aff_data_in;
 end rtl;

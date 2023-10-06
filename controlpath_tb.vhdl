@@ -35,7 +35,7 @@ begin
   stim_proc : process
   begin
     reset_tb  <= '0';
-    enable_tb <= '0';
+    enable_tb <= '1';
     g_tb      <= '0';
     d_tb      <= '0';
     gReset_tb <= '0';

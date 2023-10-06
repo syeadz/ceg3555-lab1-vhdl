@@ -5,9 +5,9 @@ entity lab1_tb is
 end;
 
 architecture rtl of lab1_tb is
-  signal clk_tb, enable_tb      : std_logic;
-  signal g_tb, d_tb, g_reset_tb : std_logic;
-  signal led_signals_tb         : std_logic_vector(7 downto 0);
+  signal clk_tb, enable_tb, reset_tb : std_logic;
+  signal g_tb, d_tb, g_reset_tb      : std_logic;
+  signal led_signals_tb              : std_logic_vector(7 downto 0);
 
   signal sim_end  : boolean := false;
   constant period : time    := 50 ns;
@@ -17,6 +17,7 @@ begin
     (
       clk         => clk_tb,
       enable      => enable_tb,
+      reset       => reset_tb,
       g           => g_tb,
       d           => d_tb,
       g_reset     => g_reset_tb,
@@ -37,10 +38,12 @@ begin
   stim_proc : process
   begin
     enable_tb  <= '1';
+    reset_tb   <= '0';
     g_reset_tb <= '0';
     g_tb       <= '0';
     d_tb       <= '0';
     wait for period;
+
     assert (led_signals_tb = "00000000") report "Error 1" severity error;
 
     g_tb <= '1';

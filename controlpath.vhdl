@@ -15,11 +15,11 @@ end;
 
 architecture rtl of controlpath is
   signal s0, s1, s2, s3, s4 : std_logic;
-  signal s0_cond            : std_logic;
-  signal s1_cond            : std_logic;
-  signal s2_cond            : std_logic;
-  signal s3_cond            : std_logic;
-  signal s4_cond            : std_logic;
+  signal s0_cond            : std_logic := '0';
+  signal s1_cond            : std_logic := '0';
+  signal s2_cond            : std_logic := '0';
+  signal s3_cond            : std_logic := '0';
+  signal s4_cond            : std_logic := '0';
 begin
   s0_cond <= not(s1 or s2 or s3 or s4);
 
@@ -83,13 +83,13 @@ begin
     o_qBar     => open
     );
 
-  selG       <= g;
-  selD       <= d;
-  clearA     <= gReset or s4 or s0;
+  selG       <= g and not gReset;
+  selD       <= d and not gReset;
+  clearA     <= gReset or s4;
   loadGM     <= '1';
   loadDM     <= '1';
   loadA      <= '1';
-  rightShift <= s1 or s2;
-  leftShift  <= s1 or s3;
+  rightShift <= s1 or s3;
+  leftShift  <= s1 or s2;
   clk_out    <= clk;
 end;
